@@ -25,7 +25,8 @@ func (k *DBSCAN) InitAlgorithm(minSamples int, eps float64) {
 	k.eps = eps
 }
 
-func (k *DBSCAN) Fit(data [][]float64) (*outData) {
+//Fit accepts a data set and divides it into clusters using the DBSCAN method
+func (k *DBSCAN) Fit(data [][]float64) *outData {
 	k.data = data
 	k.visited = make([]int64, len(k.data))
 	var indCluster int64 = 0
@@ -42,13 +43,14 @@ func (k *DBSCAN) Fit(data [][]float64) (*outData) {
 			k.visited[indPoint] = -1
 		}
 	}
-	return nil, &outData{
+	return &outData{
 		Dimension:     int64(len(k.data[0])),
 		CountClusters: indCluster,
 		Predict:       k.visited,
 	}
 }
 
+//expandCluster expands the cluster and find neighbors neighbors
 func (k *DBSCAN) expandCluster(indCluster int64, neighbours []int) {
 	// neighbours contain neighbor indexes
 	for _, indPoint := range neighbours {
