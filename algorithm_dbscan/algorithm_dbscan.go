@@ -4,14 +4,9 @@ import "math"
 
 type DBSCAN struct {
 	data         [][]float64
-	dimension    int
-	centers      [][]float64
 	visited      []int64
-	clusters     [][][]float64
 	eps          float64
 	minSamples   int
-	acc          []float64
-	countsPoints []int
 }
 
 type outData struct {
@@ -89,6 +84,17 @@ func euclideanDistance(point1 []float64, point2 []float64) float64 {
 		dist += (point1[i] - point2[i]) * (point1[i] - point2[i])
 	}
 	return math.Sqrt(dist)
+}
+
+//Accuracy calculates the quality metric
+func (k *DBSCAN) Accuracy(predict []int, labels []int) float64 {
+	metrica := 0
+	for i := range predict {
+		if labels[i] == predict[i] {
+			metrica++
+		}
+	}
+	return float64(metrica) / float64(len(labels))
 }
 
 //func (k *DBSCAN) Predict() {
