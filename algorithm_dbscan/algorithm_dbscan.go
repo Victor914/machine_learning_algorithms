@@ -26,16 +26,15 @@ func (k *DBSCAN) Fit(data [][]float64) *outData {
 	k.visited = make([]int64, len(k.data))
 	var indCluster int64 = 0
 	for indPoint := range k.data {
-		if k.visited[indPoint] != 0 {
-			continue
-		}
-		indCluster++
-		neighbours := k.findNeighbours(indPoint)
-		if len(neighbours) >= k.minSamples {
-			k.visited[indPoint] = indCluster
-			k.expandCluster(indCluster, neighbours)
-		} else {
-			k.visited[indPoint] = -1
+		if k.visited[indPoint] == 0 {
+			indCluster++
+			neighbours := k.findNeighbours(indPoint)
+			if len(neighbours) >= k.minSamples {
+				k.visited[indPoint] = indCluster
+				k.expandCluster(indCluster, neighbours)
+			} else {
+				k.visited[indPoint] = -1
+			}
 		}
 	}
 	return &outData{
@@ -52,13 +51,12 @@ func (k *DBSCAN) expandCluster(indCluster int64, neighbours []int) {
 		if k.visited[indPoint] == -1 {
 			k.visited[indPoint] = indCluster
 		}
-		if k.visited[indPoint] != 0 {
-			continue
-		}
-		k.visited[indPoint] = indCluster
-		allNeighbours := k.findNeighbours(indPoint)
-		if len(allNeighbours) >= k.minSamples{
-			neighbours = append(neighbours, allNeighbours...)
+		if k.visited[indPoint] == 0 {
+			k.visited[indPoint] = indCluster
+			allNeighbours := k.findNeighbours(indPoint)
+			if len(allNeighbours) >= k.minSamples{
+				neighbours = append(neighbours, allNeighbours...)
+			}
 		}
 	}
 }
