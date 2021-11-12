@@ -25,15 +25,15 @@ func (k *DBSCAN) InitAlgorithm(minSamples int, eps float64) {
 	k.eps = eps
 }
 
-func (k *DBSCAN) Fit(data [][]float64) (error, *outData) {
+func (k *DBSCAN) Fit(data [][]float64) (*outData) {
 	k.data = data
 	k.visited = make([]int64, len(k.data))
 	var indCluster int64 = 0
 	for indPoint := range k.data {
-		indCluster++
 		if k.visited[indPoint] != 0 {
 			continue
 		}
+		indCluster++
 		neighbours := k.findNeighbours(indPoint)
 		if len(neighbours) >= k.minSamples {
 			k.visited[indPoint] = indCluster
