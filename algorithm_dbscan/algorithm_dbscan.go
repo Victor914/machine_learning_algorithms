@@ -47,13 +47,13 @@ func (k *DBSCAN) Fit(data [][]float64) *outData {
 //expandCluster expands the cluster and find neighbors neighbors
 func (k *DBSCAN) expandCluster(indCluster int64, neighbours []int) {
 	// neighbours contain neighbor indexes
-	for _, indPoint := range neighbours {
-		if k.visited[indPoint] == -1 {
-			k.visited[indPoint] = indCluster
+	for i := 0; i < len(neighbours); i++ {
+		if k.visited[neighbours[i]] == -1 {
+			k.visited[neighbours[i]] = indCluster
 		}
-		if k.visited[indPoint] == 0 {
-			k.visited[indPoint] = indCluster
-			allNeighbours := k.findNeighbours(indPoint)
+		if k.visited[neighbours[i]] == 0 {
+			k.visited[neighbours[i]] = indCluster
+			allNeighbours := k.findNeighbours(neighbours[i])
 			if len(allNeighbours) >= k.minSamples{
 				neighbours = append(neighbours, allNeighbours...)
 			}
