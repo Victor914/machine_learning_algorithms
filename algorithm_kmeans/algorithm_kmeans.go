@@ -130,6 +130,7 @@ func (k *KMeans) Predict(data [][]float64) *outPredict {
 	}
 }
 
+//Accuracy calculates the quality metric
 func (k *KMeans) Accuracy(membership []int, labels []int) float64 {
 	metrica := 0
 	for i := range membership {
