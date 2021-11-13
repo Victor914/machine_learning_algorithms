@@ -85,7 +85,7 @@ func euclideanDistance(point1 []float64, point2 []float64) float64 {
 }
 
 //Accuracy calculates the quality metric
-func (k *DBSCAN) Accuracy(predict []int, labels []int) float64 {
+func (k *DBSCAN) Accuracy(predict []int64, labels []int64) float64 {
 	metrica := 0
 	for i := range predict {
 		if labels[i] == predict[i] {
