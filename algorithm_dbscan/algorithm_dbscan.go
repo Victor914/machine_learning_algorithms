@@ -37,6 +37,12 @@ func (k *DBSCAN) Fit(data [][]float64) *outData {
 			}
 		}
 	}
+	for ind := range k.visited {
+		if k.visited[ind] == -1 {
+			indCluster++
+			k.visited[ind] = indCluster
+		}
+	}
 	return &outData{
 		Dimension:     int64(len(k.data[0])),
 		CountClusters: indCluster,

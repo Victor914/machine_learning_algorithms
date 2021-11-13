@@ -1,4 +1,4 @@
-package make_plot
+	package make_plot
 
 import (
 	"bufio"
