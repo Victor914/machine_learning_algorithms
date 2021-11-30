@@ -14,9 +14,9 @@ type CART struct {
 	Trees     []*Tree
 }
 
-func (k *CART) InitAlgorithm(depth int, minCunt int, countFold int) {
+func (k *CART) InitAlgorithm(depth int, minCount int, countFold int) {
 	k.depth = depth
-	k.minCount = minCunt
+	k.minCount = minCount
 	k.countFold = countFold
 }
 
@@ -254,19 +254,20 @@ func (t *Tree) PrintTree() {
 	fmt.Println("Decision Tree")
 	fmt.Println("Level 0")
 	for len(queue) != 0 {
-	}
-	if queue[0].sheet {
-		fmt.Print("label: ", queue[0].label, "    ")
 
-	} else {
-		fmt.Print("index: ", queue[0].index, " value: ", queue[0].value, "    ")
-		queue = append(queue, queue[0])
+		if queue[0].sheet {
+			fmt.Print("label: ", queue[0].label, "    ")
+
+		} else {
+			fmt.Print("index: ", queue[0].index, " value: ", queue[0].value, "    ")
+			queue = append(queue, queue[0])
+		}
+		if math.Log2(i) == l {
+			fmt.Println()
+			fmt.Println("Level ", int(l+1))
+			l += 1
+		}
+		i += 1
+		queue = queue[1:]
 	}
-	if math.Log2(i) == l {
-		fmt.Println()
-		fmt.Println("Level ", int(l + 1))
-		l += 1
-	}
-	i += 1
-	queue = queue[1:]
 }
