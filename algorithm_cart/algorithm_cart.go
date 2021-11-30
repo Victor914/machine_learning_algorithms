@@ -33,7 +33,7 @@ func (k *CART) Accuracy(predict []int64, labels []int64) float64 {
 
 func (k *CART) CrossValSplit(data [][]float64) [][][]float64 {
 	sizeFold := len(data) / k.countFold
-	folds := make([][][]float64, k.countFold)
+	folds := make([][][]float64, 0)
 	copyData := make([][]float64, len(data))
 	for i := range data {
 		copyData[i] = make([]float64, len(data[i]))
@@ -264,7 +264,7 @@ func (t *Tree) PrintTree() {
 	}
 	if math.Log2(i) == l {
 		fmt.Println()
-		fmt.Println("Level ", int(l+1))
+		fmt.Println("Level ", int(l + 1))
 		l += 1
 	}
 	i += 1
