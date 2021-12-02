@@ -15,6 +15,7 @@ type outData struct {
 	Predict       []int64
 }
 
+//InitAlgorithm shows tree in console
 func (k *DBSCAN) InitAlgorithm(minSamples int, eps float64) {
 	k.minSamples = minSamples
 	k.eps = eps

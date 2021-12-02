@@ -14,6 +14,7 @@ type CART struct {
 	Trees     []*Tree
 }
 
+//InitAlgorithm shows tree in console
 func (k *CART) InitAlgorithm(depth int, minCount int, countFold int) {
 	k.depth = depth
 	k.minCount = minCount
@@ -31,6 +32,7 @@ func (k *CART) Accuracy(predict []int64, labels []int64) float64 {
 	return float64(metrica) / float64(len(labels))
 }
 
+//CrossValSplit divides data into folds
 func (k *CART) CrossValSplit(data [][]float64) [][][]float64 {
 	sizeFold := len(data) / k.countFold
 	folds := make([][][]float64, 0)
@@ -52,10 +54,12 @@ func (k *CART) CrossValSplit(data [][]float64) [][][]float64 {
 	return folds
 }
 
+//Tree - main node
 type Tree struct {
 	mainNode *node
 }
 
+//node - other nodes
 type node struct {
 	sheet bool
 	left  *node
@@ -65,11 +69,13 @@ type node struct {
 	label int64
 }
 
+//data - keep features and labels in splitting state
 type data struct {
 	x [][]float64
 	y []int64
 }
 
+//CrossValidationScore evaluates the algorithm on different partitions into training and test
 func (k *CART) CrossValidationScore(data [][]float64) float64 {
 	folds := k.CrossValSplit(data)
 	for indFold, fold := range folds {
@@ -97,6 +103,7 @@ func (k *CART) CrossValidationScore(data [][]float64) float64 {
 	return sumScores / float64(len(k.Scores))
 }
 
+//splitOnFeaturesAndLabels separates the features of labels
 func (k *CART) splitOnFeaturesAndLabels(allData [][]float64) *data {
 	labels := make([]int64, 0)
 	features := make([][]float64, 0)
@@ -110,6 +117,7 @@ func (k *CART) splitOnFeaturesAndLabels(allData [][]float64) *data {
 	}
 }
 
+//makeTree makes a tree
 func (k *CART) makeTree(train *data) *Tree {
 	classes := make(map[int64]bool)
 	for _, el := range train.y {
@@ -120,6 +128,7 @@ func (k *CART) makeTree(train *data) *Tree {
 	return tree
 }
 
+//makeNode makes a nodes
 func (k *CART) makeNode(train *data, classes map[int64]bool, depth int) *node {
 	if depth >= k.depth {
 		return k.makeSheet(train)
@@ -139,6 +148,7 @@ func (k *CART) makeNode(train *data, classes map[int64]bool, depth int) *node {
 	return curNode
 }
 
+//make make a sheets
 func (k *CART) makeSheet(train *data) *node {
 	classes := make(map[int64]int64)
 	for _, el := range train.y {
@@ -161,6 +171,7 @@ func (k *CART) makeSheet(train *data) *node {
 	}
 }
 
+//choiceSplit selects the best partition using the gini index
 func (k *CART) choiceSplit(classes map[int64]bool, train *data) (*node, *data, *data) {
 	var bestLeft, bestRight *data
 	value, score := 0.0, 0.0
@@ -183,6 +194,7 @@ func (k *CART) choiceSplit(classes map[int64]bool, train *data) (*node, *data, *
 	}, bestLeft, bestRight
 }
 
+//indexGini calculates the gini index
 func (k *CART) indexGini(yLeft []int64, yRight []int64, classes map[int64]bool) float64 {
 	percentClass := func(class int64, labels []int64) float64 {
 		if len(labels) != 0 {
@@ -208,6 +220,7 @@ func (k *CART) indexGini(yLeft []int64, yRight []int64, classes map[int64]bool) 
 	return gini
 }
 
+//testSplit performs partitioning
 func (k *CART) testSplit(allData *data, index int, value float64) (*data, *data) {
 	xLeft, xRight := make([][]float64, 0), make([][]float64, 0)
 	yLeft, yRight := make([]int64, 0), make([]int64, 0)
@@ -223,6 +236,7 @@ func (k *CART) testSplit(allData *data, index int, value float64) (*data, *data)
 	return &data{x: xLeft, y: yLeft}, &data{x: xRight, y: yRight}
 }
 
+//Predict makes a number of predictions based on the constructed tree
 func (t *Tree) Predict(features [][]float64) []int64 {
 	predict := make([]int64, 0)
 	for _, feat := range features {
@@ -231,6 +245,7 @@ func (t *Tree) Predict(features [][]float64) []int64 {
 	return predict
 }
 
+//predict makes one prediction based on the constructed tree
 func (t *node) predict(feat []float64) int64 {
 	if t.value < feat[t.index] {
 		if t.sheet {
@@ -247,6 +262,7 @@ func (t *node) predict(feat []float64) int64 {
 	}
 }
 
+//PrintTree shows tree in console
 func (t *Tree) PrintTree() {
 	queue := make([]*node, 0)
 	queue = append(queue, t.mainNode)
