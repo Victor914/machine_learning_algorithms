@@ -266,8 +266,8 @@ func (t *node) predict(feat []float64) int64 {
 func (t *Tree) PrintTree() {
 	queue := make([]*node, 0)
 	queue = append(queue, t.mainNode)
-	i := 1.0
-	l := 0.0
+	i := 2.0
+	l := 1.0
 	fmt.Println("Decision Tree")
 	fmt.Println("Level 0")
 	for len(queue) != 0 {
@@ -277,7 +277,8 @@ func (t *Tree) PrintTree() {
 
 		} else {
 			fmt.Print("index: ", queue[0].index, " value: ", queue[0].value, "    ")
-			queue = append(queue, queue[0])
+			queue = append(queue, queue[0].left)
+			queue = append(queue, queue[0].right)
 		}
 		if math.Log2(i) == l {
 			fmt.Println()
