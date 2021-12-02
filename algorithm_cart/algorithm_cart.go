@@ -162,16 +162,17 @@ func (k *CART) makeSheet(train *data) *node {
 }
 
 func (k *CART) choiceSplit(classes map[int64]bool, train *data) (*node, *data, *data) {
-	var left, right *data
+	var bestLeft, bestRight *data
 	value, score := 0.0, 0.0
 	var index int64 = 0
 
 	for indFeat := range train.x[0] {
 		for indRow, row := range train.x {
-			left, right = k.testSplit(train, indFeat, row[indFeat])
+			left, right := k.testSplit(train, indFeat, row[indFeat])
 			gini := k.indexGini(left.y, right.y, classes)
 			if indRow == 0 && indFeat == 0 || gini < score {
 				score, value, index = gini, row[indFeat], int64(indFeat)
+				bestLeft, bestRight = left, right
 			}
 		}
 	}
@@ -179,7 +180,7 @@ func (k *CART) choiceSplit(classes map[int64]bool, train *data) (*node, *data, *
 		sheet: false,
 		value: value,
 		index: index,
-	}, left, right
+	}, bestLeft, bestRight
 }
 
 func (k *CART) indexGini(yLeft []int64, yRight []int64, classes map[int64]bool) float64 {
