@@ -247,7 +247,7 @@ func (t *Tree) Predict(features [][]float64) []int64 {
 
 //predict makes one prediction based on the constructed tree
 func (t *node) predict(feat []float64) int64 {
-	if t.value < feat[t.index] {
+	if t.value > feat[t.index] {
 		if t.sheet {
 			return t.label
 		} else {
